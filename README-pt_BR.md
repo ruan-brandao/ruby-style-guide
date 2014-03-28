@@ -15,7 +15,7 @@ A propósito, se você gosta de Rails, você pode querer conferir o complementar
 
 Este guia de estilo de Ruby recomenda as melhores práticas para que programadores Ruby do mundo real possam escrever código que possa ser mantido por outros programadores Rubt do mundo real. Um guia de estilo que reflete o uso do mundo real é utilizado, já um guia de estilo que se prende a um ideal que foi rejeitado pelas pessoas que ele deveria ajudar corre o risco de nunca ser utilizado &ndash; não importa o quão bom ele seja.
 
-Este guia é separado em diversas seções de regras relacionadas. Eu tentei adicionar a base lógica por trás das regras se está omitida eu presumi que é bastante óbvia).
+Este guia é separado em diversas seções de regras relacionadas. Eu tentei adicionar a base lógica por trás das regras, se está omitida eu presumi que é bastante óbvia).
 
 Eu não criei essas regras do nada - elas são principalmente baseadas na minha longa carreira como engenheiro de software profissional, feedback e sugestões de membros da comunidade Ruby e vários recursos bem conceituados de programação em Ruby, como ["Programming Ruby 1.9"](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0) e ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177).
 
@@ -37,3 +37,167 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
 * [Espanhol](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
 * [Vietnamita](https://github.com/scrum2b/ruby-style-guide/blob/master/README-viVN.md)
 
+## Índice
+
+* [Layout do Código](#source-code-layout)
+* [Sintaxe](#syntax)
+* [Nomeando](#naming)
+* [Comentários](#comments)
+  * [Anotações em Comentários](#comment-annotations)
+* [Classes](#classes--modules)
+* [Exceções](#exceptions)
+* [Coleções](#collections)
+* [Strings](#strings)
+* [Expressões Regulares](#regular-expressions)
+* [Literais com Porcentagem](#percent-literals)
+* [Metaprogramação](#metaprogramming)
+* [Misc](#misc)
+* [Ferramentas](#tools)
+
+## Layout do código
+
+> Quase todo mundo está convencido de que todo estilo exceto o
+> seu próprio é feio e ilegível. Tire o "exceto o seu próprio"
+> e eles provavelmente estarão certos... <br/>
+> -- Jerry Coffin (sobre indentação)
+
+* Use 'UTF-8' como codificação do arquivo fonte
+* Use dois **espaços** por nível de indentação (soft tabs). Não utilize hard tabs.
+
+  ```Ruby
+  # ruim - quatro espaços
+  def some_method
+      do_something
+  end
+
+  # bom
+  def some_method
+    do_something
+  end
+  ```
+
+* Use quebra de linha Unix-style. (*Usuários de BSD/Solaris/Linux/Os X já fazem isso por padrão. Usuários Windows devem ser extra cuidadosos.)
+  * Se você está usando Git pode querer adicionar a seguinte configuração para proteger seu projeto de quebras de linha Windows.
+  
+    ```bash
+    $ git config --global core.autocrlf true
+    ```
+
+* Não use ';' para separar declarações e expressões. Como conclusão - use uma expressão por linha.
+
+  ```Ruby
+  # ruim
+  puts 'foobar'; # ponto-e-vírgula desnecessário
+
+  puts 'foo'; puts 'bar' # duas expressões na mesma linha
+
+  # bom
+  puts 'foobar'
+
+  puts 'foo'
+  puts 'bar'
+
+  puts 'foo', 'bar' # isso se aplica para o puts em particular
+  ```
+
+* Prefira o formato de uma linha para definir classes vazias
+
+  ```Ruby
+  # ruim
+  class FooError < StandardError
+  end
+
+  # mais ou menos
+  class FooError < StandardError; end
+
+  # bom
+  FooError = Class.new(StandardError)
+  ```
+  
+* Evite métodos de uma única linha. Apesar de eles serem um pouco populares, há algumas peculiaridades sobre a sintaxe de sua definição que os torna indesejáveis. De qualquer maneira, não deve haver mais que uma expressão em um método de uma linha
+
+  ```Ruby
+  # ruim
+  def too_much; something; something_else; end
+
+  # mais ou menos - perceba que o primeiro ; é obrigatório
+  def no_braces_method; body end
+
+  # mais ou menos - perceba que o segundo ; é opcional
+  def no_braces_method; body; end
+
+  # mais ou menos - sintaxe válida, mas nenhum ; o faz meio difícil de ler
+  def some_method() body end
+
+  # bom
+  def some_method
+    body
+  end
+  ```
+
+  Uma exceção a regra são os métodos vazios.
+
+  ```Ruby
+  # bom
+  def no_op; end
+  ```
+
+* Use espaços antes e depois de operadores, depois de vírgulas, dois pontos e ponto-e-vírgula, antes e depois de '{' e antes de '}'. Espaços embranco são (quase sempre) irrelevantes para o interpretador Ruby, mas seu uso adequado é a chave para escrever código com boa legibilidade.
+
+  ```Ruby
+  sum = 1 + 2
+  a, b = 1, 2
+  1 > 2 ? true : false; puts 'Hi'
+  [1, 2, 3].each { |e| puts e }
+  ```
+  
+  A única exceção, em relação a operadores, é o operador de exponenciação:
+  
+  ```Ruby
+  # ruim
+  e = M * c ** 2
+
+  # bom
+  e = M * c**2
+  ```
+  
+  '{' e '}' merecem um pouco de esclarecimento, por serem usados em blocos e hashes, assim como em expressões embutidas em strings. Para hashes os dois estilos são aceitáveis.
+  
+  ```Ruby
+  # bom - espaço depois { e antes }
+  { one: 1, two: 2 }
+
+  # bom - sem espaço depois { e antes }
+  {one: 1, two: 2}
+  ```
+  
+  A primeira variante é levemente mais legível (e indiscutivelmente mais popular na comunidade Ruby em geral). A segunda variante tem a vantagem de adicionar uma diferença visual entre blocos e a sintaxe literal de hashes. Qualquer uma que você escolher - aplique-a consistentemente.
+  
+  Quanto a expressões embutidas, também há duas opções aceitáveis:
+  
+  ```Ruby
+  # bom - sem espaços
+  "string#{expr}"
+
+  # ok - Indiscutivelmente mais legível
+  "string#{ expr }"
+  ```
+  
+  O primeiro estilo é extremamente mais popular e você é geralmente aconselhado a se manter nele. O segundo, por outro lado, é (sem dúvida) um pouco mais legível. Assim como com hashes - escolha um estilo e aplique-o consistentemente.
+  
+* Não utilize espaços depois de '(', '[' ou antes de ']', ')'.
+
+  ```Ruby
+  some(arg).other
+  [1, 2, 3].size
+  ```
+  
+* Não use espaço após '!'
+
+  ```Ruby
+  # ruim
+  ! something
+
+  # bom
+  !something
+  ```
