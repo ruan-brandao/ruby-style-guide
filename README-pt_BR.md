@@ -61,7 +61,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
 > e eles provavelmente estarão certos... <br/>
 > -- Jerry Coffin (sobre indentação)
 
-* Use 'UTF-8' como codificação do arquivo fonte
+* Use `UTF-8` como codificação do arquivo fonte
 * Use dois **espaços** por nível de indentação (soft tabs). Não utilize hard tabs.
 
   ```Ruby
@@ -83,7 +83,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
     $ git config --global core.autocrlf true
     ```
 
-* Não use ';' para separar declarações e expressões. Como conclusão - use uma expressão por linha.
+* Não use `;` para separar declarações e expressões. Como conclusão - use uma expressão por linha.
 
   ```Ruby
   # ruim
@@ -142,7 +142,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   def no_op; end
   ```
 
-* Use espaços antes e depois de operadores, depois de vírgulas, dois pontos e ponto-e-vírgula, antes e depois de '{' e antes de '}'. Espaços embranco são (quase sempre) irrelevantes para o interpretador Ruby, mas seu uso adequado é a chave para escrever código com boa legibilidade.
+* Use espaços antes e depois de operadores, depois de vírgulas, dois pontos e ponto-e-vírgula, antes e depois de `{` e antes de `}`. Espaços embranco são (quase sempre) irrelevantes para o interpretador Ruby, mas seu uso adequado é a chave para escrever código com boa legibilidade.
 
   ```Ruby
   sum = 1 + 2
@@ -161,7 +161,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   e = M * c**2
   ```
   
-  '{' e '}' merecem um pouco de esclarecimento, por serem usados em blocos e hashes, assim como em expressões embutidas em strings. Para hashes os dois estilos são aceitáveis.
+  `{` e `}` merecem um pouco de esclarecimento, por serem usados em blocos e hashes, assim como em expressões embutidas em strings. Para hashes os dois estilos são aceitáveis.
   
   ```Ruby
   # bom - espaço depois { e antes }
@@ -185,7 +185,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   
   O primeiro estilo é extremamente mais popular e você é geralmente aconselhado a se manter nele. O segundo, por outro lado, é (sem dúvida) um pouco mais legível. Assim como com hashes - escolha um estilo e aplique-o consistentemente.
   
-* Não utilize espaços depois de '(', '[' ou antes de ']', ')'.
+* Não utilize espaços depois de `(`, `[` ou antes de `]`, `)`.
 
   ```Ruby
   some(arg).other
@@ -200,4 +200,266 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
 
   # bom
   !something
+  ```
+
+* Indente `when` no mesmo nível de `case`. Eu sei que muitos discordarão deste item, mas é o estilo estabelecido tando em "The Ruby Programming Language" quanto em "Programming Ruby".
+
+  ```Ruby
+  # ruim
+  case
+    when song.name == 'Misty'
+      puts 'Not again!'
+    when song.duration > 120
+      puts 'Too long!'
+    when Time.now.hour > 21
+      puts "It's too late"
+    else
+      song.play
+  end
+
+  # bom
+  case
+  when song.name == 'Misty'
+    puts 'Not again!'
+  when song.duration > 120
+    puts 'Too long!'
+  when Time.now.hour > 21
+    puts "It's too late"
+  else
+    song.play
+  end
+  ```
+  
+* Quando for atribuir o resultado de uma condicional a uma variável, preserve o alinhamento comum de suas ramificações.
+
+  ```Ruby
+  # ruim - muito confuso
+  kind = case year
+  when 1850..1889 then 'Blues'
+  when 1890..1909 then 'Ragtime'
+  when 1910..1929 then 'New Orleans Jazz'
+  when 1930..1939 then 'Swing'
+  when 1940..1950 then 'Bebop'
+  else 'Jazz'
+  end
+
+  result = if some_cond
+    calc_something
+  else
+    calc_something_else
+  end
+
+  # bom - é aparente o que está acontecendo
+  kind = case year
+         when 1850..1889 then 'Blues'
+         when 1890..1909 then 'Ragtime'
+         when 1910..1929 then 'New Orleans Jazz'
+         when 1930..1939 then 'Swing'
+         when 1940..1950 then 'Bebop'
+         else 'Jazz'
+         end
+
+  result = if some_cond
+             calc_something
+           else
+             calc_something_else
+           end
+
+  # bom (e um pouco mais eficiente em relação a largura)
+  kind =
+    case year
+    when 1850..1889 then 'Blues'
+    when 1890..1909 then 'Ragtime'
+    when 1910..1929 then 'New Orleans Jazz'
+    when 1930..1939 then 'Swing'
+    when 1940..1950 then 'Bebop'
+    else 'Jazz'
+    end
+
+  result =
+    if some_cond
+      calc_something
+    else
+      calc_something_else
+    end
+  ```
+ 
+ * Use linhas em branco entre definições de método e também para fragmentar um método em parágrafos lógicos internamente.
+ 
+   ```Ruby
+  def some_method
+    data = initialize(options)
+
+    data.manipulate!
+
+    data.result
+  end
+
+  def some_method
+    result
+  end
+  ```
+  
+* Evite vírgula após o último parâmetro em uma chamada de método, especialmente quando os parâmetros estiverem todos na mesma linha.
+
+  ```Ruby
+  # ruim - mais fácil para mover/adicionar/remover parâmetros, mas ainda assim não recomendado
+  some_method(
+               size,
+               count,
+               color,
+             )
+
+  # ruim
+  some_method(size, count, color, )
+
+  # bom
+  some_method(size, count, color)
+  ```
+  
+* Use espaços antes e depois do operador `=` quando atribuir valores padrão a argumentos de métodos.
+
+  ```Ruby
+  # ruim
+  def some_method(arg1=:default, arg2=nil, arg3=[])
+    # do something...
+  end
+
+  # bom
+  def some_method(arg1 = :default, arg2 = nil, arg3 = [])
+    # do something...
+  end
+  ```
+  
+  Ainda que muitos livros sobre Ruby sugiram o primeiro estilo, o segundo é muito mais eminente na prática (e indiscutivelmente mais legível)
+
+* Evite continuação de linha com `\` onde não for necessário. Na prática, evite utilizar continuações de linha para qualquer coisa que não seja concatenação de strings.
+
+  ```Ruby
+  # ruim
+  result = 1 - \
+           2
+
+  # bom (mas ainda muito feio)
+  result = 1 \
+           - 2
+
+  long_string = 'First part of the long string' \
+                ' and second part of the long string'
+  ```
+  
+* Adote um estilo consistente de encadeamentto de métodos com várias linhas. Há dois estilos populares na comunidade Ruby, ambos considerados bons - `.` iniciando (Opção A) e `.` fechando (Opção B).
+
+ * **(Opção A)** Ao continuar a chamada de um método encadeado em outra linha passe o `.` para a segunda linha.
+
+    ```Ruby
+    # ruim - é preciso olhar a primeira linha para entender a segunda
+    one.two.three.
+      four
+
+    # bom - fica claro o que está acontecendo na segunda linha
+    one.two.three
+      .four
+    ```
+
+  * **(Opção B)** Ao continuar a chamada de um método encadeado em outra linha,
+    inclua o `.` na primeira linha para indicar que a expressão continua.
+
+    ```Ruby
+    # ruim - é preciso ler a segunda linha para entender que a chamada continua
+    one.two.three
+      .four
+
+    # bom - fica claro que a expressão continua além da primeira linha
+    one.two.three.
+      four
+    ```
+
+  Uma discussão sobre os méritos de cada um destes estilos pode ser encontrada [aqui](https://github.com/bbatsov/ruby-style-guide/pull/176).
+  
+* Alinhe os parâmetros de uma chamada de método caso eles se estendam por mais de uma linha. Quando alinhar parâmetros não for bom devido ao comprimento da linha, usar uma indentação para as linhas após a primeira também é aceitável.
+
+  ```Ruby
+  # ponto de partida (a linha é muito longa)
+  def send_mail(source)
+    Mailer.deliver(to: 'bob@example.com', from: 'us@example.com', subject: 'Important message', body: source.text)
+  end
+
+  # ruim (indentação dupla)
+  def send_mail(source)
+    Mailer.deliver(
+        to: 'bob@example.com',
+        from: 'us@example.com',
+        subject: 'Important message',
+        body: source.text)
+  end
+
+  # bom
+  def send_mail(source)
+    Mailer.deliver(to: 'bob@example.com',
+                   from: 'us@example.com',
+                   subject: 'Important message',
+                   body: source.text)
+  end
+
+  # bom (indentação simples)
+  def send_mail(source)
+    Mailer.deliver(
+      to: 'bob@example.com',
+      from: 'us@example.com',
+      subject: 'Important message',
+      body: source.text
+    )
+  end
+  ```
+  
+* Alinhe os elementos de arrays literais que ocuparem mais de uma linha.
+
+  ```Ruby
+  # ruim - indentação simples
+  menu_item = ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+    'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+
+  # bom
+  menu_item = [
+    'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+    'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam'
+  ]
+
+  # bom
+  menu_item =
+    ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+     'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+  ```
+  
+* Adicione `_` (underscore) a números muito longos para melhorar sua legibilidade.
+
+  ```Ruby
+  # ruim - quantos 0s tem nisso?
+  num = 1000000
+
+  # bom - mito mais fácil de analisar para o cérebro humano
+  num = 1_000_000
+  ```
+  
+* Utilize RDoc e suas convenções para documentar APIs. Não coloque uma linha em branco entre o bloco de comentários e o 'def'.
+
+* Limite linhas a 80 caracteres.
+
+* Evite espaços em branco no final das linhas.
+
+* Termine todo arquivo com uma linha em branco.
+
+* Não use comentários em bloco. Eles não podem ser precedidos por espaços em branco e não são tão facilmente indentificáveis quanto comentários comuns.
+
+  ```Ruby
+  # ruim
+  =begin
+  comment line
+  another comment line
+  =end
+
+  # bom
+  # comment line
+  # another comment line
   ```
