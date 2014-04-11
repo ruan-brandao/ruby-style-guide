@@ -61,7 +61,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
 > e eles provavelmente estarão certos... <br/>
 > -- Jerry Coffin (sobre indentação)
 
-* Use `UTF-8` como codificação do arquivo fonte
+* Use 'UTF-8' como codificação do arquivo fonte
 * Use dois **espaços** por nível de indentação (soft tabs). Não utilize hard tabs.
 
   ```Ruby
@@ -83,7 +83,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
     $ git config --global core.autocrlf true
     ```
 
-* Não use `;` para separar declarações e expressões. Como conclusão - use uma expressão por linha.
+* Não use ';' para separar declarações e expressões. Como conclusão - use uma expressão por linha.
 
   ```Ruby
   # ruim
@@ -142,7 +142,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   def no_op; end
   ```
 
-* Use espaços antes e depois de operadores, depois de vírgulas, dois pontos e ponto-e-vírgula, antes e depois de `{` e antes de `}`. Espaços embranco são (quase sempre) irrelevantes para o interpretador Ruby, mas seu uso adequado é a chave para escrever código com boa legibilidade.
+* Use espaços antes e depois de operadores, depois de vírgulas, dois pontos e ponto-e-vírgula, antes e depois de '{' e antes de '}'. Espaços embranco são (quase sempre) irrelevantes para o interpretador Ruby, mas seu uso adequado é a chave para escrever código com boa legibilidade.
 
   ```Ruby
   sum = 1 + 2
@@ -161,7 +161,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   e = M * c**2
   ```
   
-  `{` e `}` merecem um pouco de esclarecimento, por serem usados em blocos e hashes, assim como em expressões embutidas em strings. Para hashes os dois estilos são aceitáveis.
+  '{' e '}' merecem um pouco de esclarecimento, por serem usados em blocos e hashes, assim como em expressões embutidas em strings. Para hashes os dois estilos são aceitáveis.
   
   ```Ruby
   # bom - espaço depois { e antes }
@@ -185,7 +185,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   
   O primeiro estilo é extremamente mais popular e você é geralmente aconselhado a se manter nele. O segundo, por outro lado, é (sem dúvida) um pouco mais legível. Assim como com hashes - escolha um estilo e aplique-o consistentemente.
   
-* Não utilize espaços depois de `(`, `[` ou antes de `]`, `)`.
+* Não utilize espaços depois de '(', '[' ou antes de ']', ')'.
 
   ```Ruby
   some(arg).other
@@ -202,7 +202,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   !something
   ```
 
-* Indente `when` no mesmo nível de `case`. Eu sei que muitos discordarão deste item, mas é o estilo estabelecido tando em "The Ruby Programming Language" quanto em "Programming Ruby".
+* Indente 'when' no mesmo nível de 'case'. Eu sei que muitos discordarão deste item, mas é o estilo estabelecido tando em "The Ruby Programming Language" quanto em "Programming Ruby".
 
   ```Ruby
   # ruim
@@ -317,7 +317,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   some_method(size, count, color)
   ```
   
-* Use espaços antes e depois do operador `=` quando atribuir valores padrão a argumentos de métodos.
+* Use espaços antes e depois do operador '=' quando atribuir valores padrão a argumentos de métodos.
 
   ```Ruby
   # ruim
@@ -333,7 +333,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   
   Ainda que muitos livros sobre Ruby sugiram o primeiro estilo, o segundo é muito mais eminente na prática (e indiscutivelmente mais legível)
 
-* Evite continuação de linha com `\` onde não for necessário. Na prática, evite utilizar continuações de linha para qualquer coisa que não seja concatenação de strings.
+* Evite continuação de linha com '\' onde não for necessário. Na prática, evite utilizar continuações de linha para qualquer coisa que não seja concatenação de strings.
 
   ```Ruby
   # ruim
@@ -348,9 +348,9 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
                 ' and second part of the long string'
   ```
   
-* Adote um estilo consistente de encadeamentto de métodos com várias linhas. Há dois estilos populares na comunidade Ruby, ambos considerados bons - `.` iniciando (Opção A) e `.` fechando (Opção B).
+* Adote um estilo consistente de encadeamentto de métodos com várias linhas. Há dois estilos populares na comunidade Ruby, ambos considerados bons - '.' iniciando (Opção A) e '.' fechando (Opção B).
 
- * **(Opção A)** Ao continuar a chamada de um método encadeado em outra linha passe o `.` para a segunda linha.
+ * **(Opção A)** Ao continuar a chamada de um método encadeado em outra linha passe o '.' para a segunda linha.
 
     ```Ruby
     # ruim - é preciso olhar a primeira linha para entender a segunda
@@ -432,7 +432,7 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
      'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
   ```
   
-* Adicione `_` (underscore) a números muito longos para melhorar sua legibilidade.
+* Adicione '_' (underscore) a números muito longos para melhorar sua legibilidade.
 
   ```Ruby
   # ruim - quantos 0s tem nisso?
@@ -462,4 +462,374 @@ Traduções do guia estão  disponíveis nos seguintes idiomas:
   # bom
   # comment line
   # another comment line
+  ```
+
+## Sintaxe
+
+* Use `::` apenas para referenciar constantes (isso inclui classes e módulos) e construtores (como `Array()` ou `Nokogiri::HTML()`). Nunca use `::` para chamar métodos comuns.
+
+  ```Ruby
+  # ruim
+  SomeClass::some_method
+  some_object::some_method
+
+  # bom
+  SomeClass.some_method
+  some_object.some_method
+  SomeModule::SomeClass::SOME_CONST
+  SomeModule::SomeClass()
+  ```
+  
+* Use `def` com parênteses quando houver argumentos. Omita os parênteses quando o método não aceitar nenhum argumento.
+
+   ```Ruby
+   # bad
+   def some_method()
+     # corpo omitido
+   end
+
+   # good
+   def some_method
+     # corpo omitido
+   end
+
+   # bad
+   def some_method_with_arguments arg1, arg2
+     # corpo omitido
+   end
+
+   # good
+   def some_method_with_arguments(arg1, arg2)
+     # corpo omitido
+   end
+   ```
+
+* Nunca utilize `for`, a não ser que saiba exatamente o porquê. Na maioria das vezes é preferível usar iteradores. `for` é implementado de maneira semelhante ao `each` (de modo a adicionar outra camada de abstração), mas com um porém - `for` não introduz um novo escopo (ao contrário do `each`) e variáveis definidas dentro de seu bloco serão visíveis fora dele.
+
+  ```Ruby
+  arr = [1, 2, 3]
+
+  # ruim
+  for elem in arr do
+    puts elem
+  end
+
+  # note que elem é acessível fora do loop for
+  elem #=> 3
+
+  # good
+  arr.each { |elem| puts elem }
+
+  # elem não é acessível fora do bloco each
+  elem #=> NameError: undefined local variable or method `elem'
+  ```
+
+* Nunca utilize `then` para `if`/`unless` de múltiplas linhas.
+
+  ```Ruby
+  # ruim
+  if some_condition then
+    # corpo omitido
+  end
+
+  # bom
+  if some_condition
+    # corpo omitido
+  end
+  ```
+  
+* Sempre coloque a condição na mesma linha do `if`/`unless` em uma condicional com mais de uma linha.
+
+  ```Ruby
+  # ruim
+  if
+    some_condition
+    do_something
+    do_something_else
+  end
+
+  # bom
+  if some_condition
+    do_something
+    do_something_else
+  end
+  
+* Favoreça o operador ternário (`?:`) ao invés de `if/then/else/end`. É mais comum e obviamente mais conciso.
+
+  ```Ruby
+  # ruim
+  result = if some_condition then something else something_else end
+
+  # bom
+  result = some_condition ? something : something_else
+  ```
+  
+* Utilize uma expressão para cada resultado no operador ternário. Isso também significa que operadores ternários não devem ser aninhados. Prefira usar `if/else` nesses casos.
+
+  ```Ruby
+  # ruim
+  some_condition ? (nested_condition ? nested_something : nested_something_else) : something_else
+
+  # bom
+  if some_condition
+    nested_condition ? nested_something : nested_something_else
+  else
+    something_else
+  end
+  ```
+  
+* Nunca use `if x: ...` - foi removido a partir do Ruby 1.9. Utilize o operador ternário neste caso.
+
+  ```Ruby
+  # ruim
+  result = if some_condition: something else something_else end
+
+  # bom
+  result = some_condition ? something : something_else
+  ```
+  
+* Nunca use `if x; ...`. Ao invés disto utilize o operador ternário.
+
+* Se aproveite do fato de `if` e `case` serem expressões que retornam um valor.
+
+  ```Ruby
+  # ruim
+  if condition
+    result = x
+  else
+    result = y
+  end
+
+  # bom
+  result =
+    if condition
+      x
+    else
+      y
+    end
+  ```
+  
+* Use `when x then ...` para casos de uma linha. A sintaxe alternativa `when x: ...` foi removida a partir do Ruby 1.9.
+
+* Nunca utilize `when x; ...`. Veja a regra anterior.
+
+* Use `!` ao invés de `not`.
+
+  ```Ruby
+  # ruim - parênteses são necessários por causa da precedência de operador
+  x = (not something)
+
+  # bom
+  x = !something
+  ```
+  
+* Evite o uso de `!!`.
+
+  ```Ruby
+  # ruim
+  x = 'test'
+  # teste obscuro para checar se o valor é nil
+  if !!x
+    # corpo omitido
+  end
+
+  x = false
+  # negação dupla é inútil em booleanos
+  !!x # => false
+
+  # bom
+  x = 'test'
+  unless x.nil?
+    # corpo omitido
+  end
+  ```
+  
+* As expressões `and` e `or` estão banidas. Apenas não vale a pena usá-las. Use `&&` e `||` no lugar delas.
+
+  ```Ruby
+  # ruim
+  # expressão booleana
+  if some_condition and some_other_condition
+    do_something
+  end
+
+  # controle de fluxo
+  document.saved? or document.save!
+
+  # bom
+  # expressão booleana
+  if some_condition && some_other_condition
+    do_something
+  end
+
+  # controle de fluxo
+  document.saved? || document.save!
+  ```
+  
+* Evite `?:` (operador ternário) com mais de uma linha. Use `if/unless` neste caso.
+
+* Prefira usar um modificador ´if/unless´ quando o corpo tiver apenas uma linha. outra boa alternativa é utilizar controle de fluxo ´&&/||´.
+
+  ```Ruby
+  # ruim
+  if some_condition
+    do_something
+  end
+
+  # bom
+  do_something if some_condition
+
+  # outra boa opção
+  some_condition && do_something
+  ```
+  
+* Prefira utilizar `unless` ao invés de condicionais negativas (ou controle de fluxo `||`).
+
+  ```Ruby
+  # ruim
+  do_something if !some_condition
+
+  # ruim
+  do_something if not some_condition
+
+  # bom
+  do_something unless some_condition
+
+  # outra boa opção
+  some_condition || do_something
+  ```
+  
+* Nunca use `unless` com `else`. Reescreva a condicional com o caso positivo primeiro.
+
+  ```Ruby
+  # ruim
+  unless success?
+    puts 'failure'
+  else
+    puts 'success'
+  end
+
+  # bom
+  if success?
+    puts 'success'
+  else
+    puts 'failure'
+  end
+  ```
+  
+* Não use parênteses nas condições de um `if/unless/while/until`.
+
+  ```Ruby
+  # ruim
+  if (x > 10)
+    # corpo omitido
+  end
+
+  # bom
+  if x > 10
+    # corpo omitido
+  end
+  ```
+  
+* Nunca use `while/until condition do` para `while/until` com mais de uma linha.
+
+  ```Ruby
+  # ruim
+  while x > 5 do
+    # corpo omitido
+  end
+
+  until x > 5 do
+    # corpo omitido
+  end
+
+  # bom
+  while x > 5
+    # corpo omitido
+  end
+
+  until x > 5
+    # corpo omitido
+  end
+  ```
+  
+* Prefira modificadores `while/until` quando tiver o corpo com apenas uma linha.
+
+  ```Ruby
+  # ruim
+  while some_condition
+    do_something
+  end
+
+  # bom
+  do_something while some_condition
+  ```
+  
+* Prefira utilizar `until` ao invés de `while` para condições negativas.
+
+  ```Ruby
+  # ruim
+  do_something while !some_condition
+
+  # bom
+  do_something until some_condition
+  ```
+  
+* Use `Kernel#loop` com break ao invés de `begin/end/until` ou `begin/end/while` para testes após o loop.
+
+  ```Ruby
+  # ruim
+  begin
+    puts val
+    val += 1
+  end while val < 0
+
+  # bom
+  loop do
+    puts val
+    val += 1
+    break unless val < 0
+  end
+  ```
+  
+* Não utilize parênteses nos argumentos de métodos que são parte de uma DSL interna (ex. Rake, Rails, RSpec), métodos que possuem status de "keyword" no Ruby (ex. `attr_reader`, `puts`) e métodos que acessam atributos.
+
+  ```Ruby
+  class Person
+    attr_reader :name, :age
+
+    # omitido
+  end
+
+  temperance = Person.new('Temperance', 30)
+  temperance.name
+
+  puts temperance.age
+
+  x = Math.sin(y)
+  array.delete(e)
+
+  bowling.score.should == 0
+  ```
+  
+* Omita as chaves ao redor de um hash implícito de opções.
+
+  ```Ruby
+  # ruim
+  user.set({ name: 'John', age: 45, permissions: { read: true } })
+
+  # bom
+  user.set(name: 'John', age: 45, permissions: { read: true })
+  ```
+  
+* Omita tanto as chaves quanto os parênteses de métodos que são parte de um DSL interna.
+
+  ```Ruby
+  class Person < ActiveRecord::Base
+    # ruim
+    validates(:name, { presence: true, length: { within: 1..10 } })
+
+    # bom
+    validates :name, presence: true, length: { within: 1..10 }
+  end
   ```
